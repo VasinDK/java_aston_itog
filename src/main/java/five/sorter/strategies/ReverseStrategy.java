@@ -14,7 +14,7 @@ public class ReverseStrategy implements SortStrategy {
 
     @Override
     public List<Car> sort(List<Car> cars) {
-        List<Car> sorted = original.sort(cars);
+        List<Car> sorted = strategy.sort(cars);
         Collections.reverse(sorted);
         return sorted;
     }
