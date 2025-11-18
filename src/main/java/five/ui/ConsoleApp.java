@@ -3,6 +3,7 @@ package five.ui;
 import five.validation.InputValidator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -32,7 +33,7 @@ public class ConsoleApp {
 
             switch (choice) {
                 case "1" -> fillArray();
-                case "2" -> System.out.println("Тут будет сортировка");
+                case "2" -> sortArray();
                 case "3" -> showArray();
                 case "0" -> {
                     System.out.println("Выход из программы");
@@ -146,4 +147,47 @@ public class ConsoleApp {
         }
         System.out.println("\nМассив автомобилей заполнен вручную.");
     }
+
+    /**
+     * Показывает меню выбора стратегии сортировки и выполняет сортировку массива.
+     * TODO временно сортируются строки. После появления класса Car — сортировать объекты Car.
+     */
+    private void sortArray(){
+        if(cars.isEmpty()){
+            System.out.println("Массив пуст. Сначала выполните заполнение.");
+            return;
+        }
+        System.out.println("\nВыберите способ сортировки:");
+        System.out.println("1. По бренду (модели)");
+        System.out.println("2. По мощности");
+        System.out.println("3. По году выпуска");
+        System.out.println("4. В обратном порядке (повернуть текущую сортировку)");
+        System.out.print("Ваш выбор: ");
+
+        String input = scanner.nextLine();
+
+        switch (input){
+            case "1" -> {
+                System.out.println("Сортировка по бренду пока не доступна — временно сортируются строки.");
+                Collections.sort(cars);
+            }
+            case "2" -> {
+                System.out.println("Сортировка по мощности пока не доступна — временно сортируются строки.");
+                Collections.sort(cars);
+            }
+            case "3" -> {
+                System.out.println("Сортировка по году пока не доступна — временно сортируются строки.");
+                Collections.sort(cars);
+            }
+            case "4" -> {
+                Collections.reverse(cars);
+            }
+            default -> {
+                System.out.println("Некорректный выбор.");
+                return;
+            }
+        }
+        System.out.println("Сортировка выполнена.");
+    }
+
 }
