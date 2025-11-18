@@ -76,7 +76,7 @@ public class ConsoleApp {
         switch (input) {
             case "1" -> System.out.println("Заполнение из файла (будет реализовано позже)");
             case "2" -> fillRandom();
-            case "3" -> System.out.println("Ручное заполнение (будет реализовано позже)");
+            case "3" -> fillManual();
             default -> System.out.println("Неверный выбор. Возврат в главное меню.");
         }
     }
@@ -115,5 +115,35 @@ public class ConsoleApp {
         }
     }
 
+    /**
+     * Ручной ввод автомобилей с валидацией.
+     * TODO временно сохраняются строки. После появления класса Car заменить на создание объектов Car.
+     */
+    private void fillManual() {
+        cars.clear();  // Пока не знаю как будет храниться наш список. Поэтому я его пока что очищаю каждый раз.
 
+        for (int i = 0; i < arraySize; i++) {
+            System.out.println("\nВведите данные для автомобиля №" + (i + 1));
+            System.out.print("Модель: ");
+            String model = scanner.nextLine().trim();
+
+            System.out.print("Мощность (л.с): ");
+            String powerInput = scanner.nextLine().trim();
+
+            System.out.print("Год выпуска: ");
+            String yearInput = scanner.nextLine().trim();
+
+            try {
+                int power = InputValidator.parsePositiveInt(powerInput, "Мощность");
+                int year = InputValidator.parsePositiveInt(yearInput, "Год выпуска");
+
+                String car = model + " | " + power + " л.с | " + year + " г.";
+                cars.add(car);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Ошибка: " + e.getMessage());
+                i--;
+            }
+        }
+        System.out.println("\nМассив автомобилей заполнен вручную.");
+    }
 }
