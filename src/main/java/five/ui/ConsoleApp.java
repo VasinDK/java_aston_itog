@@ -1,11 +1,13 @@
 package five.ui;
 
+import five.validation.InputValidator;
+
 import java.util.Scanner;
 
 public class ConsoleApp {
 
     private final Scanner scanner = new Scanner(System.in);
-    private int arraySize = 0;
+    private int arraySize = 0; //запоминаем длину массива
 
     private void printMenu() {
         System.out.println("\n=== МЕНЮ ===");
@@ -27,7 +29,7 @@ public class ConsoleApp {
 
             switch (choice) {
                 case "1" -> {
-                    System.out.println("Тут будет заполнение массива");
+                    fillArray();
                 }
                 case "2" -> {
                     System.out.println("Тут будет сортировка");
@@ -44,10 +46,19 @@ public class ConsoleApp {
         }
     }
 
+    /**
+     * Запрашивает у пользователя длину массива и проверяет корректность ввода.
+     * При корректном значении сохраняет его, при ошибке выводит сообщение.
+     */
     private void fillArray(){
         System.out.print("Введите длину массива: ");
+        String input = scanner.nextLine();
 
-
-
+        try {
+            arraySize = InputValidator.parsePositiveInt(input, "Длина массива");
+            System.out.println("Длина массива установлена: " + arraySize);
+        }catch (IllegalArgumentException e){
+            System.out.println("Ошибка: " +e.getMessage());
+        }
     }
 }
