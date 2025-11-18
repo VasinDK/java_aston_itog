@@ -18,8 +18,6 @@ public class ConsoleApp {
         System.out.print("Ваш выбор: ");
     }
 
-
-
     public void run(){
         boolean running = true;
 
@@ -28,15 +26,9 @@ public class ConsoleApp {
             String choice = scanner.nextLine();
 
             switch (choice) {
-                case "1" -> {
-                    fillArray();
-                }
-                case "2" -> {
-                    System.out.println("Тут будет сортировка");
-                }
-                case "3" -> {
-                    System.out.println("Тут будет вывод текущего массива");
-                }
+                case "1" -> fillArray();
+                case "2" -> System.out.println("Тут будет сортировка");
+                case "3" -> System.out.println("Тут будет вывод текущего массива");
                 case "0" -> {
                     System.out.println("Выход из программы");
                     running = false;
@@ -57,8 +49,30 @@ public class ConsoleApp {
         try {
             arraySize = InputValidator.parsePositiveInt(input, "Длина массива");
             System.out.println("Длина массива установлена: " + arraySize);
+
+            chooseFillingMethod();
         }catch (IllegalArgumentException e){
             System.out.println("Ошибка: " +e.getMessage());
+        }
+    }
+
+    /**
+     * Показывает меню выбора способа заполнения массива и обрабатывает выбор пользователя.
+     */
+    private void chooseFillingMethod() {
+        System.out.println("\nВыберите способ заполнения массива:");
+        System.out.println("1. Из файла");
+        System.out.println("2. Случайными данными");
+        System.out.println("3. Вручную");
+        System.out.print("Ваш выбор: ");
+
+        String input = scanner.nextLine();
+
+        switch (input) {
+            case "1" -> System.out.println("Заполнение из файла (будет реализовано позже)");
+            case "2" -> System.out.println("Заполнение случайными данными (будет реализовано позже)");
+            case "3" -> System.out.println("Ручное заполнение (будет реализовано позже)");
+            default -> System.out.println("Неверный выбор. Возврат в главное меню.");
         }
     }
 }
