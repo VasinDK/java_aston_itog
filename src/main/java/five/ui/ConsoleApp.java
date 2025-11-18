@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class ConsoleApp {
 
     private final Scanner scanner = new Scanner(System.in);
+    private int arraySize = 0;
 
     private void printMenu() {
         System.out.println("\n=== МЕНЮ ===");
@@ -14,6 +15,8 @@ public class ConsoleApp {
         System.out.println("0. Выход");
         System.out.print("Ваш выбор: ");
     }
+
+
 
     public void run(){
         boolean running = true;
@@ -39,6 +42,11 @@ public class ConsoleApp {
                 default -> System.out.println("Неизвестная команда, попробуйте ещё раз.");
             }
         }
+    }
+
+    private void fillArray(){
+        System.out.print("Введите длину массива: ");
+
 
 
     }
