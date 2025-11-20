@@ -1,5 +1,8 @@
 package five.sorter.strategies;
 
+import five.sorter.Car;
+import five.sorter.SortStrategy;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
