@@ -1,7 +1,5 @@
 package five.sorter.strategies;
 
-import five.sorter.SortStrategy;
-
 import java.util.Collections;
 import java.util.List;
 

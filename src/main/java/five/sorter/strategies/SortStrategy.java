@@ -1,4 +1,4 @@
-package five.sorter;
+package five.sorter.strategies;
 
 import java.util.List;
 
