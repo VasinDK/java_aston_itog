@@ -2,7 +2,7 @@ package five.validation;
 
 public class InputValidator {
     /**
-     * преобразует строку в положительное число или выбрасывает ошибку
+     * Преобразует строку в положительное число или выбрасывает ошибку
      */
 
     public static int parsePositiveInt(String value, String fieldName) {

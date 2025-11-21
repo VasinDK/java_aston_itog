@@ -1,9 +1,7 @@
 package five.sorter;
-
+import five.car.Car;
 import five.sorter.strategies.SortStrategy;
-
 import java.util.List;
-
 
 /**
  * Класс SortExecutor выполняет сортировку списка автомобилей

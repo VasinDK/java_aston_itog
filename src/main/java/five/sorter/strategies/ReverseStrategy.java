@@ -1,8 +1,5 @@
 package five.sorter.strategies;
-
-import five.sorter.Car;
-import five.sorter.SortStrategy;
-
+import five.car.Car;
 import java.util.Collections;
 import java.util.List;
 
