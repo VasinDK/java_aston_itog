@@ -96,34 +96,41 @@ public class CustomReader {
      */
     private Car parseCarLine(String line) {
         try {
-            // Формат: "600л.с., Mazda, 2006"
-            if (!line.contains("л.с.,")) return null;
+            // Убираем слово "Автомобиль:" если оно есть
+            String cleaned = line.replace("Автомобиль:", "").trim();
 
-            String[] parts = line.split(",", 3);
+            // Разбиваем по запятым
+            String[] parts = cleaned.split(",");
+
             if (parts.length != 3) return null;
 
-            String hpPart = parts[0].trim();
-            String model = parts[1].trim();
-            String yearPart = parts[2].trim();
+            // Извлекаем бренд
+            String brandPart = parts[0].trim(); // "бренд = Ford"
+            String powerPart = parts[1].trim(); // "мощность = 150 лс"
+            String yearPart  = parts[2].trim(); // "год = 2018"
 
-            if (!hpPart.endsWith("л.с.")) return null;
-            String hpNumeric = hpPart.substring(0, hpPart.length() - 4).trim();
-            int power = Integer.parseInt(hpNumeric);
-            int year = Integer.parseInt(yearPart);
+            String brand = brandPart.replace("бренд =", "").trim();
+            String powerString = powerPart
+                    .replace("мощность =", "")
+                    .replace("лс", "")
+                    .trim();
+            String yearString = yearPart.replace("год =", "").trim();
+
+            int power = Integer.parseInt(powerString);
+            int year = Integer.parseInt(yearString);
 
             return new CarBuilderImpl()
-                    .brand(model)
+                    .brand(brand)
                     .power(power)
                     .year(year)
                     .build();
-        } catch (NumberFormatException e) {
-            writeToConsoleLn("Ошибка парсинга строки: \"" + line + "\" — пропущено");
-            return null;
+
         } catch (Exception e) {
-            writeToConsoleLn("Неожиданная ошибка при парсинге строки: \"" + line + "\" — пропущено");
+            writeToConsoleLn("Ошибка парсинга строки: \"" + line + "\" — пропущено");
             return null;
         }
     }
+
 
     /**
      * Запись списка машин в файл.
