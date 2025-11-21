@@ -5,6 +5,9 @@ package five.sorter;
  * TODO удалить, когда появится настоящий Car от напарника.
  */
 public class Car {
+    public Car(int power, String model, int year) {
+    }
+
     public String getBrand() {
         return "";
     }
