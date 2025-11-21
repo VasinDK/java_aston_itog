@@ -3,19 +3,19 @@ package five.ui;
 import five.car.Car;
 import five.car.CarBuilderImpl;
 import five.exception.CarIllegalArgumentException;
+import five.reader.CustomReader;
 import five.sorter.SortExecutor;
 import five.sorter.strategies.ByBrand;
 import five.sorter.strategies.ByPower;
 import five.sorter.strategies.ByYear;
 import five.sorter.strategies.ReverseStrategy;
 import five.validation.InputValidator;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
 public class ConsoleApp {
+    private final CustomReader reader = new CustomReader();
 
     private final Scanner scanner = new Scanner(System.in);
     private int arraySize = 0; //запоминаем длину массива
@@ -28,6 +28,8 @@ public class ConsoleApp {
         System.out.println("1. Заполнить массив автомобилей");
         System.out.println("2. Отсортировать массив");
         System.out.println("3. Показать текущий массив");
+        System.out.println("4. Сохранить массив в файл");
+        System.out.println("5. Найти количество совпадений (многопоточно)");
         System.out.println("0. Выход");
         System.out.print("Ваш выбор: ");
     }
@@ -43,6 +45,8 @@ public class ConsoleApp {
                 case "1" -> fillArray();
                 case "2" -> sortArray();
                 case "3" -> showArray();
+                case "4" -> saveToFile();
+                case "5" -> countMatches();
                 case "0" -> {
                     System.out.println("Выход из программы");
                     running = false;
@@ -83,7 +87,16 @@ public class ConsoleApp {
         String input = scanner.nextLine();
 
         switch (input) {
-            case "1" -> System.out.println("Заполнение из файла (будет реализовано позже)");
+            case "1" -> {
+                System.out.print("Введите путь к файлу (Enter — путь по умолчанию): ");
+                String path = scanner.nextLine().trim();
+                try {
+                    cars = reader.readFromFile(path);
+                    System.out.println("Массив загружен из файла.");
+                } catch (CarIllegalArgumentException e) {
+                    System.out.println("Ошибка: " + e.getMessage());
+                }
+            }
             case "2" -> fillRandom();
             case "3" -> fillManual();
             default -> System.out.println("Неверный выбор. Возврат в главное меню.");
@@ -135,10 +148,9 @@ public class ConsoleApp {
 
     /**
      * Ручной ввод автомобилей с валидацией.
-     * TODO временно сохраняются строки. После появления класса Car заменить на создание объектов Car.
      */
     private void fillManual() {
-        cars.clear();  // Пока не знаю как будет храниться наш список. Поэтому я его пока что очищаю каждый раз.
+        cars.clear();
 
         for (int i = 0; i < arraySize; i++) {
             System.out.println("\nВведите данные для автомобиля №" + (i + 1));
@@ -172,7 +184,6 @@ public class ConsoleApp {
 
     /**
      * Показывает меню выбора стратегии сортировки и выполняет сортировку массива.
-     * TODO временно сортируются строки. После появления класса Car — сортировать объекты Car.
      */
     private void sortArray() {
         if (cars.isEmpty()) {
@@ -204,6 +215,68 @@ public class ConsoleApp {
 
         cars = executor.exec();
         System.out.println("Сортировка выполнена.");
+    }
+
+    private void saveToFile() {
+        if (cars.isEmpty()) {
+            System.out.println("Массив пуст. Сначала выполните заполнение.");
+            return;
+        }
+
+        System.out.print("Введите путь к файлу (Enter — добавить в файл по умолчанию): ");
+        String path = scanner.nextLine().trim();
+
+        try {
+            reader.writeCarsToFile(path, cars);
+            System.out.println("Данные успешно сохранены.");
+        }catch (CarIllegalArgumentException e){
+            System.out.println("Ошибка записи: " + e.getMessage());
+        }
+    }
+
+    private void countMatches() {
+        if (cars.isEmpty()) {
+            System.out.println("Массив пуст. Сначала выполните заполнение.");
+            return;
+        }
+        System.out.println("\nВыберите критерий поиска:");
+        System.out.println("1. По бренду (модели)");
+        System.out.println("2. По мощности");
+        System.out.println("3. По году выпуска");
+        System.out.print("Ваш выбор: ");
+
+        String choice = scanner.nextLine();
+
+        String value;
+        switch (choice) {
+            case "1" -> {
+                System.out.print("Введите бренд: ");
+                value = scanner.nextLine().trim();
+                System.out.println("Поиск запущен... результат появится в консоли.");
+                reader.countCarsAsync(cars, car -> car.getBrand().equalsIgnoreCase(value));
+                return;
+            }
+            case "2" -> {
+                System.out.print("Введите мощность (число): ");
+                value = scanner.nextLine().trim();
+                int power = InputValidator.parsePositiveInt(value, "Мощность");
+                System.out.println("Поиск запущен... результат появится в консоли.");
+                reader.countCarsAsync(cars, car -> car.getPower() == power);
+                return;
+            }
+            case "3" -> {
+                System.out.print("Введите год выпуска: ");
+                value = scanner.nextLine().trim();
+                int year = InputValidator.parsePositiveInt(value, "Год выпуска");
+                System.out.println("Поиск запущен... результат появится в консоли.");
+                reader.countCarsAsync(cars, car -> car.getYear() == year);
+                return;
+            }
+            default -> {
+                System.out.println("Некорректный выбор.");
+                return;
+            }
+        }
     }
 
 
