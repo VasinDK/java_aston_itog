@@ -5,10 +5,7 @@ import five.car.CarBuilderImpl;
 import five.exception.CarIllegalArgumentException;
 import five.reader.CustomReader;
 import five.sorter.SortExecutor;
-import five.sorter.strategies.ByBrand;
-import five.sorter.strategies.ByPower;
-import five.sorter.strategies.ByYear;
-import five.sorter.strategies.ReverseStrategy;
+import five.sorter.strategies.*;
 import five.validation.InputValidator;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +19,6 @@ public class ConsoleApp {
 
     private List<Car> cars = new ArrayList<>();
 
-
     private void printMenu() {
         System.out.println("\n=== МЕНЮ ===");
         System.out.println("1. Заполнить массив автомобилей");
@@ -34,10 +30,10 @@ public class ConsoleApp {
         System.out.print("Ваш выбор: ");
     }
 
-    public void run(){
+    public void run() {
         boolean running = true;
 
-        while (running){
+        while (running) {
             printMenu();
             String choice = scanner.nextLine();
 
@@ -60,7 +56,7 @@ public class ConsoleApp {
      * Запрашивает у пользователя длину массива и проверяет корректность ввода.
      * При корректном значении сохраняет его, при ошибке выводит сообщение.
      */
-    private void fillArray(){
+    private void fillArray() {
         System.out.print("Введите длину массива: ");
         String input = scanner.nextLine();
 
@@ -69,8 +65,8 @@ public class ConsoleApp {
             System.out.println("Длина массива установлена: " + arraySize);
 
             chooseFillingMethod();
-        }catch (IllegalArgumentException e){
-            System.out.println("Ошибка: " +e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ошибка: " + e.getMessage());
         }
     }
 
@@ -110,7 +106,7 @@ public class ConsoleApp {
         cars.clear();
 
         String[] brands = {"BMW", "Audi", "Toyota", "Ford", "Mazda", "Mercedes"};
-        int[] powers = {90, 110, 150, 200, 250, 300};
+        int[] powers = {90, 110, 150, 333, 233, 133, 543};
         int[] years = {2005, 2010, 2015, 2018, 2020, 2023};
 
         for (int i = 0; i < arraySize; i++) {
@@ -127,16 +123,14 @@ public class ConsoleApp {
                 i--;
             }
         }
-
         System.out.println("Массив случайных автомобилей создан.");
     }
-
 
     /**
      * Выводит текущий массив автомобилей.
      */
-    private void showArray(){
-        if(cars.isEmpty()){
+    private void showArray() {
+        if (cars.isEmpty()) {
             System.out.println("Массив пуст. Сначала выполните заполнение.");
             return;
         }
@@ -196,6 +190,8 @@ public class ConsoleApp {
         System.out.println("2. По мощности");
         System.out.println("3. По году выпуска");
         System.out.println("4. В обратном порядке");
+        System.out.println("5. По мощности (чётные — сортируем, нечётные — на местах)");
+        System.out.println("6. По году (чётные — сортируем, нечётные — на местах)");
         System.out.print("Ваш выбор: ");
 
         String input = scanner.nextLine();
@@ -207,6 +203,8 @@ public class ConsoleApp {
             case "2" -> executor.setStrategy(new ByPower());
             case "3" -> executor.setStrategy(new ByYear());
             case "4" -> executor.setStrategy(new ReverseStrategy(new ByBrand()));
+            case "5" -> executor.setStrategy(new ByPowerFreezeOdds());
+            case "6" -> executor.setStrategy(new ByYearFreezeOdds());
             default -> {
                 System.out.println("Некорректный выбор.");
                 return;
@@ -229,7 +227,7 @@ public class ConsoleApp {
         try {
             reader.writeCarsToFile(path, cars);
             System.out.println("Данные успешно сохранены.");
-        }catch (CarIllegalArgumentException e){
+        } catch (CarIllegalArgumentException e) {
             System.out.println("Ошибка записи: " + e.getMessage());
         }
     }
@@ -278,6 +276,4 @@ public class ConsoleApp {
             }
         }
     }
-
-
 }
