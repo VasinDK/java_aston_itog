@@ -29,23 +29,6 @@ public class CarImpl implements Car {
         return year;
     }
 
-    /* @Override
-    public void validate() throws CarIllegalArgumentException {
-        if (brand == null || brand.isBlank()) {
-            throw new CarIllegalArgumentException(CarMessages.ERROR_EMPTY_BRAND);
-        }
-
-        if (power <= 0) {
-            throw new CarIllegalArgumentException(CarMessages.ERROR_INVALID_POWER);
-        }
-
-        int currentYear = java.time.LocalDate.now().getYear();
-        if (year < 1900 || year > currentYear) {
-            throw new CarIllegalArgumentException(CarMessages.ERROR_INVALID_YEAR);
-        }
-    }
-    Под валидатор заготовка*/
-
     @Override
     public String toString() {
         return "Автомобиль: бренд = " + brand +
